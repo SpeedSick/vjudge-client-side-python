@@ -1,8 +1,7 @@
 import json
 import yaml
 
-from requests import post
-
+from requests import get, post
 
 URL = 'http://0.0.0.0:5000/'
 
@@ -21,10 +20,14 @@ class Test:
         return self.__expected_answer__
 
     def run(self):
+        print(URL)
+        print(self.get_data())
         response = post(URL, data=self.get_data())
         self.check_response(response)
 
     def check_response(self, response):
+        print(response)
+        print(json.dumps(response.json()))
         if response.status_code == 200 and response.json() == self.get_expected_answer():
             self.__score__ = 1
         else:
