@@ -50,7 +50,6 @@ class Test:
 
 
 def load_tests():
-
     data = yaml.load(open("tests.yml", 'r').read())
 
     tests = []
