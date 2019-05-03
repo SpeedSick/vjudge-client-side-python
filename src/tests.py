@@ -1,4 +1,6 @@
 import json
+
+import requests
 import yaml
 
 from requests import get, post
@@ -20,14 +22,10 @@ class Test:
         return self.__expected_answer__
 
     def run(self):
-        print(URL)
-        print(self.get_data())
         response = post(URL, data=self.get_data())
         self.check_response(response)
 
     def check_response(self, response):
-        print(response)
-        print(json.dumps(response.json()))
         if response.status_code == 200 and response.json() == self.get_expected_answer():
             self.__score__ = 1
         else:
@@ -62,8 +60,14 @@ def load_tests():
     return tests
 
 
+def load_env():
+    data = yaml.load(open('env.yml', 'r').read())
+    return data
+
+
 def run():
     tests = load_tests()
+    env = load_env()
 
     score = 0
 
@@ -71,4 +75,11 @@ def run():
         test.run()
         score += test.get_score()
 
-    return score
+    requests.post(
+        env.get('url'),
+        headers={'x-api-key': env.get('X_API_KEY')},
+        json={
+            'submission': env.get('submission'),
+            'score': score,
+        }
+    )
