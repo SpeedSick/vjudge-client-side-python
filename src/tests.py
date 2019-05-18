@@ -5,7 +5,7 @@ import yaml
 
 from requests import get, post
 
-URL = 'http://0.0.0.0:5000/'
+URL = 'http://task_1_task_1:5000/'
 
 
 class Test:
